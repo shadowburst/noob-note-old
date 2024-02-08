@@ -3,9 +3,9 @@
 
 use serde::{Serialize, Serializer};
 use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
-use tokio::sync::Mutex;
 use std::{collections::HashMap, env};
 use tauri::Manager;
+use tokio::sync::Mutex;
 
 mod actions;
 mod decode;
@@ -38,31 +38,37 @@ pub struct DbInstances(Mutex<HashMap<String, SqlitePool>>);
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![actions::get_cycles])
+        .invoke_handler(tauri::generate_handler![
+            actions::get_cycles,
+            actions::get_classrooms
+        ])
         .setup(|app| {
-            return tauri::async_runtime::block_on(
-                async move {
-                    let db: String = env::var("DATABASE_URL").unwrap_or("./db/app.db".into());
+            return tauri::async_runtime::block_on(async move {
+                let db: String = env::var("DATABASE_URL").unwrap_or("./db/app.db".into());
 
-                    let options = SqliteConnectOptions::new()
-                        .filename(&db)
-                        .create_if_missing(true);
+                let options = SqliteConnectOptions::new()
+                    .filename(&db)
+                    .create_if_missing(true);
 
-                    let pool = SqlitePool::connect_with(options).await.map_err(|_e| { Error::DatabaseNotLoaded("app pool".into()) })?;
+                let pool = SqlitePool::connect_with(options)
+                    .await
+                    .map_err(|_e| Error::DatabaseNotLoaded("app pool".into()))?;
 
-                    sqlx::migrate!("./db/migrations").run(&pool).await.map_err(|_e| { Error::DatabaseNotLoaded("app migrations".into()) })?;
+                sqlx::migrate!("./db/migrations")
+                    .run(&pool)
+                    .await
+                    .map_err(|_e| Error::DatabaseNotLoaded("app migrations".into()))?;
 
-                    let instances = DbInstances::default();
+                let instances = DbInstances::default();
 
-                    let mut lock = instances.0.lock().await;
-                    lock.insert(db, pool);
-                    drop(lock);
+                let mut lock = instances.0.lock().await;
+                lock.insert(db, pool);
+                drop(lock);
 
-                    app.manage(instances);
+                app.manage(instances);
 
-                    return Ok(());
-                },
-            );
+                return Ok(());
+            });
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -7,7 +7,7 @@
             </div>
             <div class="flex grow items-stretch justify-center gap-2">
                 <HeaderLink to="/">Tableau de board</HeaderLink>
-                <HeaderLink to="/classes">Classes</HeaderLink>
+                <HeaderLink to="/classrooms">Classrooms</HeaderLink>
                 <HeaderLink to="/periods">Périodes</HeaderLink>
             </div>
         </div>

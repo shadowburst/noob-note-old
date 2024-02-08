@@ -1,3 +1,3 @@
 <template>
-    <div>Classes</div>
+    <div>Classrooms</div>
 </template>

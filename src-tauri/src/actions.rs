@@ -13,7 +13,9 @@ async fn select(
     let db: String = env::var("DATABASE_URL").unwrap_or("./db/app.db".into());
 
     let mut instance = instances.0.lock().await;
-    let pool = instance.get_mut(&db).ok_or(Error::DatabaseNotLoaded(db.into()))?;
+    let pool = instance
+        .get_mut(&db)
+        .ok_or(Error::DatabaseNotLoaded(db.into()))?;
 
     let mut query = sqlx::query(&query);
     for value in values {
@@ -44,7 +46,20 @@ async fn select(
 }
 
 #[command(rename_all = "snake_case")]
-pub async fn get_cycles(instances: State<'_, DbInstances>) -> Result<Vec<HashMap<String, JsonValue>>> {
+pub async fn get_cycles(
+    instances: State<'_, DbInstances>,
+) -> Result<Vec<HashMap<String, JsonValue>>> {
     return select(instances, "SELECT id, name FROM cycles".into(), vec![]).await;
 }
 
+#[command(rename_all = "snake_case")]
+pub async fn get_classrooms(
+    instances: State<'_, DbInstances>,
+) -> Result<Vec<HashMap<String, JsonValue>>> {
+    return select(
+        instances,
+        "SELECT id, name, grade_id FROM classrooms".into(),
+        vec![],
+    )
+    .await;
+}
