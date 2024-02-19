@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     css: ['./assets/css/main.css'],
     devtools: { enabled: true },
-    modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt'],
+    modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', 'shadcn-nuxt'],
     postcss: {
         plugins: {
             autoprefixer: {},
