@@ -8,5 +8,5 @@
     "bracketSameLine": false,
     "arrowParens": "always",
     "vueIndentScriptAndStyle": false,
-    "plugins": ["prettier-plugin-tailwindcss"]
+    "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"]
 }

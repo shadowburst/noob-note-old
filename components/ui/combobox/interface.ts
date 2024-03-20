@@ -1,20 +1,12 @@
+import type {
+    AcceptableValue as ComboboxAcceptableValue,
+    ComboboxRootEmits,
+    ComboboxRootProps,
+} from 'radix-vue/dist/Combobox/ComboboxRoot';
 import type { HTMLAttributes } from 'vue';
-import type { ComboboxRootEmits, ComboboxRootProps } from 'radix-vue';
 
-export type ComboboxOption = Record<string, string>;
-export type ComboboxGroup = {
-    heading?: string;
-    options: ComboboxOption[];
-};
+export type AcceptableValue = ComboboxAcceptableValue;
 
-export type ComboboxProps = ComboboxRootProps & {
-    class?: HTMLAttributes['class'];
-    filterFunction: (options: ComboboxOption[], query: string) => ComboboxOption[];
-    modelValue: string;
-    options: ComboboxOption[];
-    groupProp?: keyof ComboboxOption;
-    labelProp: keyof ComboboxOption;
-    valueProp: keyof ComboboxOption;
-};
+export type ComboboxProps<T extends AcceptableValue> = ComboboxRootProps<T> & { class?: HTMLAttributes['class'] };
 
 export type ComboboxEmits = ComboboxRootEmits;

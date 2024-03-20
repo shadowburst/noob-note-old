@@ -63,3 +63,15 @@ pub async fn get_classrooms(
     )
     .await;
 }
+
+#[command(rename_all = "snake_case")]
+pub async fn get_grades(
+    instances: State<'_, DbInstances>,
+) -> Result<Vec<HashMap<String, JsonValue>>> {
+    return select(
+        instances,
+        "SELECT id, name, cycle_id FROM grades".into(),
+        vec![],
+    )
+    .await;
+}

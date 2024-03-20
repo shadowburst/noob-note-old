@@ -1,3 +1,5 @@
 <template>
-    <div>Périodes</div>
+    <div>
+        <Command></Command>
+    </div>
 </template>

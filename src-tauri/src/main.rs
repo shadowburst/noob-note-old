@@ -40,7 +40,8 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             actions::get_cycles,
-            actions::get_classrooms
+            actions::get_classrooms,
+            actions::get_grades
         ])
         .setup(|app| {
             return tauri::async_runtime::block_on(async move {

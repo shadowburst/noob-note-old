@@ -6,7 +6,11 @@
                 <SelectValue> </SelectValue>
             </SelectTrigger>
             <SelectContent>
-                <SelectItem v-for="classroom in classrooms" :key="classroom.id" :value="classroom.id.toString()">
+                <SelectItem
+                    v-for="classroom in classroomStore.items"
+                    :key="classroom.id"
+                    :value="classroom.id.toString()"
+                >
                     {{ classroom.name }}
                 </SelectItem>
             </SelectContent>
@@ -30,16 +34,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Classroom, Cycle } from '@/types';
-import { classroomApi } from '@/api';
+import useClassroomStore from '~/stores/classroom';
 
-const classrooms = ref<Classroom[]>([]);
+const classroomStore = useClassroomStore();
 
-onMounted(async () => {
-    classrooms.value = await classroomApi.fetchAll();
-
-    if (classrooms.value.length === 0) {
-        // window.location.href = '/'
+onBeforeMount(async () => {
+    await classroomStore.get();
+    if (classroomStore.items.length === 0) {
+        window.location.href = '/classrooms/create';
     }
 });
 </script>
